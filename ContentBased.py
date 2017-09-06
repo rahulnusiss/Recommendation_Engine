@@ -1,11 +1,10 @@
 import pandas as pd
 import time
-#import redis
 from numpy import *
 from flask import current_app
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import linear_kernel
-
+import json
 
 def info(msg):
     current_app.logger.info(msg)
@@ -16,6 +15,7 @@ class ContentEngine(object):
     def __init__(self):
         """ For intialization TBD"""
 
+    #Test training function
     def train(self, data_source):
         start = time.time()
         ds = pd.read_csv(data_source)
@@ -38,8 +38,42 @@ class ContentEngine(object):
         scoreMatrix = self.sortScore(scoreMatrix,n)
 
         print("After Sorting")
-        print(scoreMatrix)
+        print(scoreMatrix[0])
         print("Engine trained in %s seconds." % (time.time() - start))
+
+    # Training function used in server file
+    def trainFeature(self, data_source, json_data):
+        """
+        :param data_source: input file
+        :param json_data: input json data with features as keys.
+        :return: Get the products in sorted order according to their recommendation in form of json
+        """
+        #json_data = js.load(json_feature)
+        start = time.time()
+        ds = pd.read_csv(data_source)
+        print("Training data ingested in %s seconds." % (time.time() - start))
+
+        n = size(ds['id'], axis=0)
+
+        scoreMatrix = [[0 for j in range(n)] for i in range(2)]
+        scoreMatrix[0] = ds['id']
+        # Workaround for a panda bug. Better solution TBD
+        scoreMatrix[0] = scoreMatrix[0].copy()
+
+        start = time.time()
+        scoreMatrix = self._train(ds, 'description', json_data['description'], scoreMatrix, 1)
+        scoreMatrix = self._train(ds, 'color', json_data['color'], scoreMatrix, 1)
+        scoreMatrix = self._train(ds, 'gender', json_data['gender'], scoreMatrix, 6)
+        scoreMatrix = self._train(ds, 'gender', 'NEUTER', scoreMatrix, 3)
+
+        # Sort the items in descending order of their score so that most matching items is at top
+        scoreMatrix = self.sortScore(scoreMatrix, n)
+
+        print("After Sorting")
+        #print(scoreMatrix)
+        print("Engine trained in %s seconds." % (time.time() - start))
+        return scoreMatrix[0].to_json()
+
 
     def _train(self, ds, attrName, attrValue, scoreMatrix, scoreFactor):
         """
