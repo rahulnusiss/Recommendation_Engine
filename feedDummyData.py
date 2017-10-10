@@ -1,46 +1,50 @@
 import datetime
 import random
 import psycopg2
+import uuid
 """ Data format:
 (1, 1.01, "clothes", 435, "PP", datetime.time(12, 10, 30), "Mall", "Unknown", 124.99,
 "NA", "SHOES", "MEN", "20pieces", True, 256, "Mall", datetime.time(8, 0, 0),
 "Local", "Foot", "NA", "Lacoste", "AsRequired", datetime.time(7, 4, 5), "Who Knows")
 """
 
-"""
-Python loop:
-for i in range(0, 10, 2):
-    print(i)
+"""Create Schema :-
+https://www.postgresql.org/docs/9.3/static/sql-createschema.html
 
->>> 0
->>> 2
->>> 4
->>> 6
->>> 8
+Create table under schema:-
+    CREATE TABLE myschema.mytable
+"""
+
+"""
+Generate uuid
+>>> import uuid
+>>> uid = uuid.uuid4()
+>>> uid.hex
+'df008b2e24f947b1b873c94d8a3f2201'
 """
 class product(object):
 
     conn_string = "";
 
     def __init__(self):
-        self.conn_string = "host='mentorica.cejv1pgu6hhb.us-east-1.rds.amazonaws.com' dbname='MentoricaProLoyal' " \
-                           "user='rahul' password='postgresql'";
+        self.conn_string = "host='mentorica.czdfre5hbvcb.ap-southeast-1.rds.amazonaws.com' dbname='devretailgear' " \
+                           "user='mentorica' password='M3nt0r1c4'";
 
         # Hardcoding dummy data
-        self.dummyData = [[1.01, 2.01, 3.03, 4.09, 2.03, 1.05, 3.01],
+        self.dummyData = [[1, 2, 3, 4, 2, 1, 3],
                           ["A","B","C","D","E","F","G"],
-                          [31,32,33,34,35,36,37,],
+                          ["31","32","33","34","35","36","37",],
                           ["PP", "Prasanna", "Pawar", "John", "Jack", "Mentorica", "Mediacorp"],
                           [datetime.time()],
                           ["Mall", "Mall1","Mall2","Mall3", "Mall4", "Mall5", "Mall6"],
                           ["Unknown1", "Unknown2", "Unknown3", "Unknown4", "Unknown5", "Unknown6", "Unknown7"],
-                          [123.66, 45.32, 99.99, 799.99, 899.99, 90.5, 100.99],
+                          ["123.66", "45.32", "99.99", "799.99", "899.99", "90.5", "100.99"],
                           ["NA","NA","NA","NA","NA","NA","NA"],
                           ["Shoes", "Jacket", "Short dress", "Plastic", "Paperbag", "vest", "Bag"],
                           ["MEN","LADIES"],
-                          ["20","9","8","4","2","5","6"],
+                          [20,9,8,4,2,5,6],
                           [True, False],
-                          [141,142,143,144,145,146,147],
+                          ["141","142","143","144","145","146","147"],
                           ["Mall", "Mall1", "Mall2", "Mall3", "Mall4", "Mall5", "Mall6"],
                           [datetime.time()],
                           ["Local", "Global", "International", "Exotic", "Obsolete", "Traditional", "Hippy"],
@@ -60,7 +64,9 @@ class product(object):
         for i in range(0, 151, 1):
             data = [0 for idx in range(0, 24, 1)]
             print (data)
-            data[0] = i+1;
+            uid = uuid.uuid4();
+            data[0] = uid.hex;
+            #data[0] = i+1;
             for j in range(0,23,1):
                 if j == 4 or j == 15 or j == 21:
                     data[j+1] = self.dummyData[j][0]
