@@ -103,7 +103,7 @@ class product(object):
         # Set auto commit to true
         conn.set_isolation_level(0)
         # Prepare query for pos_product table
-        query_statement = "INSERT INTO product.pos_product (id, version, category, company_id," \
+        query_statement = "INSERT INTO public.pos_product (id, version, category, company_id," \
                           " create_by, created_at, datasource, default_barcode, default_price, " \
                           "default_sku, description, gender, inventory, is_active, pos_id," \
                           " product_type, published_at, published_scope, subcategory, tags, " \
