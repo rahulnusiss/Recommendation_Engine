@@ -1,0 +1,8 @@
+{
+  "name": "managecart",
+  "description": "usercart dynamodb cruds for manage cart",
+  "memory": 128,
+  "timeout": 5,
+  "role": "arn:aws:iam::182614784713:role/managecart_lambda_function",
+  "environment": {}
+}

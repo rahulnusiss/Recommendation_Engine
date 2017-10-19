@@ -1,0 +1,9 @@
+{
+    "name": "mentorica-managecart",
+    "description": "manage cart",
+    "version": "0.1.0",
+    "author": "mentorica",
+    "dependencies": {
+        "aws-sdk": "*"
+    }
+  }
