@@ -1,4 +1,5 @@
 import datetime
+import time
 import random
 import psycopg2
 import uuid
@@ -33,9 +34,9 @@ class product(object):
         # Hardcoding dummy data
         self.dummyData = [[1, 2, 3, 4, 2, 1, 3],
                           ["A","B","C","D","E","F","G"],
-                          ["31","32","33","34","35","36","37",],
+                          ["8a8083895ec63a2f015ec63a6ea10000","8a8083895ec63a2f015ec63a6ea10000","8a8083895ec63a2f015ec63a6ea10000","8a8083895ec63a2f015ec63a6ea10000","8a8083895ee51d33015ee53f307a0000","8a8083895ee51d33015ee53f307a0000","8a8083895ee51d33015ee53f307a0000"],
                           ["PP", "Prasanna", "Pawar", "John", "Jack", "Mentorica", "Mediacorp"],
-                          [datetime.time()],
+                          [datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S')],
                           ["Mall", "Mall1","Mall2","Mall3", "Mall4", "Mall5", "Mall6"],
                           ["Unknown1", "Unknown2", "Unknown3", "Unknown4", "Unknown5", "Unknown6", "Unknown7"],
                           ["123.66", "45.32", "99.99", "799.99", "899.99", "90.5", "100.99"],
@@ -46,18 +47,18 @@ class product(object):
                           [True, False],
                           ["141","142","143","144","145","146","147"],
                           ["Mall", "Mall1", "Mall2", "Mall3", "Mall4", "Mall5", "Mall6"],
-                          [datetime.time()],
+                          [datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S')],
                           ["Local", "Global", "International", "Exotic", "Obsolete", "Traditional", "Hippy"],
                           ["A", "B", "C", "D", "E", "F", "G"],
                           ["NA", "NA", "NA", "NA", "NA", "NA", "NA"],
                           ["Lacoste","Prada","Adidas","Armani","Nike","AirJordan","H&M"],
                           ["AsRequired", "AsRequired", "AsRequired", "AsRequired", "AsRequired", "AsRequired", "AsRequired"],
-                          [datetime.time()],
+                          [datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S')],
                           ["Who Knows", "Who Knows", "Who Knows", "Who Knows", "Who Knows", "Who Knows",
                            "Who Knows"]]
 
     def feedData(self):
-        cursor, query_statement = self.initDB()
+        cursor, query_statement, conn = self.initDB()
         print(" Feeding data Started");
         print(self.dummyData)
 
@@ -66,6 +67,7 @@ class product(object):
             print (data)
             uid = uuid.uuid4();
             data[0] = uid.hex;
+	    print(data[0])
             #data[0] = i+1;
             for j in range(0,23,1):
                 if j == 4 or j == 15 or j == 21:
@@ -82,10 +84,12 @@ class product(object):
                          data[14],data[15],data[16],data[17],data[18],data[19],data[20],
                          data[21],data[22])"""
             try:
-                # Execute query for pos_product table.
-                cursor.execute(query_statement, feed_data);
+            #Execute query for pos_product table.
+		print(feed_data)
+		cursor.execute(query_statement, feed_data)
+		conn.commit()
             except:
-                print( "Feeding data failed which means Query execution failed. ")
+        	print( "Feeding data failed which means Query execution failed. ")
         print(" Finished feeding data")
 
     def initDB(self):
@@ -111,7 +115,7 @@ class product(object):
                           " VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, " \
                           "%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)";  # Use %s for integer too, %s is placeholder
 
-        return cursor, query_statement
+        return cursor, query_statement, conn
 
 def main():
     print("Starting feeding data")
