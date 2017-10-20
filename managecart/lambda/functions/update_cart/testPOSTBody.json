@@ -1,0 +1,12 @@
+{
+  "data": {
+    "RetailerTestLamda1": [
+      "LambdaTest1",
+      "LambdaTest2"
+    ],
+    "RetailerTestLamda2": [
+      "LambdaTest3",
+      "LambdaTest4"
+    ]
+  }
+}
