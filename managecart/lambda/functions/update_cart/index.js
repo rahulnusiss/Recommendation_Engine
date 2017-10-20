@@ -5,22 +5,23 @@ AWS.config.update({
   endpoint: "https://dynamodb.us-east-1.amazonaws.com"
 });
 
+// Will not work on lambda test but will work with APIGateway due ot JSON.parse
 exports.handle = function(e, ctx, cb) {
 var docClient = new AWS.DynamoDB.DocumentClient()
 
 var table = "UserCart";
 
-var id = 326;
+var body = JSON.parse(e.body);
 // Update the item, unconditionally,
 
 var params = {
         TableName:table,
         Key:{
-            "id": id        
+            "id": body.id      
         },
         UpdateExpression: "set Customer.Retailers = :r",
         ExpressionAttributeValues:{
-            ":r": e.data
+            ":r": body.data
         },
         ReturnValues:"UPDATED_NEW"
     };

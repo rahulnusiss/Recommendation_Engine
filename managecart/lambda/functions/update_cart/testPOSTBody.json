@@ -1,12 +1,31 @@
+//For API Gateway
 {
+  "id": 324,
   "data": {
-    "RetailerTestLamda1": [
-      "LambdaTest1",
-      "LambdaTest2"
+    "RetailerAPI1": [
+      "APIProdctssss",
+      "APIProdctssss"
     ],
-    "RetailerTestLamda2": [
-      "LambdaTest3",
-      "LambdaTest4"
+    "RetailerAPI2": [
+      "APIProdctrrrr",
+      "APIProdctrrrrr"
     ]
   }
 }
+
+//For previous lambda Test. Do not incude JSON.parse in lamda function
+
+{
+  "data": {
+    "RetailerAPI1": [
+      "APIProdctssss",
+      "APIProdctssss"
+    ],
+    "RetailerAPI2": [
+      "APIProdctrrrr",
+      "APIProdctrrrrr"
+    ]
+  }
+}
+
+
