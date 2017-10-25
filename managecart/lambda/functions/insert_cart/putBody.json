@@ -1,0 +1,18 @@
+{
+    "Item" : {  
+      "id": 555,
+      "Customer": {
+        "CustomerId": "555",
+        "Retailers": {
+          "RetaileAPI5series": [
+            "LHBeer555",
+            "LHCoke555"
+          ],
+          "RetailerAPI555": [
+            "LHWax555",
+            "LHCandle555"
+          ]
+        }
+      }
+    }
+}

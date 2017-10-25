@@ -1,8 +1,8 @@
 var AWS = require("aws-sdk");
 
 AWS.config.update({
-  region: "us-east-1",
-  endpoint: "https://dynamodb.us-east-1.amazonaws.com"
+  region: "ap-southeast-1",
+  endpoint: "https://dynamodb.ap-southeast-1.amazonaws.com"
 });
 
 // Will not work on lambda test but will work with APIGateway due ot JSON.parse
