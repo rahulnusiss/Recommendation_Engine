@@ -1,3 +1,37 @@
+// With quantity
+{
+  "Item": {
+      "id": 446,
+      "Customer": {
+        "CustomerId": "124136",
+        "Retailers": {
+          "Retailer1": [
+            {
+              "Product": "LHWax446",
+              "Quantity": 2
+            },
+            {
+              "Product": "LHCandle446",
+              "Quantity": 3
+            }
+          ],
+          "Retailer2": [
+            {
+              "Product": "LHWax22",
+              "Quantity": 32
+            },
+            {
+              "Product": "LHCandle22",
+              "Quantity": 13
+            }
+          ]
+        }
+      }
+    }
+}
+
+
+// Older
 {
     "Item" : {  
       "id": 555,

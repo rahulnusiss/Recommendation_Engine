@@ -1,4 +1,34 @@
-//For API Gateway
+// With quantity - This is default
+{
+      "id": 426,
+      "data": {
+          "Retailer1": [
+            {
+              "Product": "APILHWax556",
+              "Quantity": 15
+            },
+            {
+              "Product": "APILHCandle56",
+              "Quantity": 5
+            }
+          ],
+          "Retailer2": [
+            {
+              "Product": "APILHWax25",
+              "Quantity": 51
+            },
+            {
+              "Product": "APILHCandle52",
+              "Quantity": 7
+            }
+        ]
+        
+    }   
+}
+
+
+
+//For API Gateway- older
 {
   "id": 324,
   "data": {
@@ -13,8 +43,7 @@
   }
 }
 
-//For previous lambda Test. Do not incude JSON.parse in lamda function
-
+//For previous lambda Test. Do not incude JSON.parse in lamda function - oldest
 {
   "data": {
     "RetailerAPI1": [
