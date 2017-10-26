@@ -96,6 +96,10 @@ class ContentEngine(object):
         scoreMatrix = self._train(ds, 'description', json_data['description'], scoreMatrix, 1)
         # Color no longer exist in database table pos_product
         #scoreMatrix = self._train(ds, 'color', json_data['color'], scoreMatrix, 1)
+        # For gender need to replace None or NAN values with NEUTER
+        ds['gender'].replace('None', 'NEUTER', inplace=True);
+        ds.loc[ds['gender'].isnull(), 'gender'] = 'NEUTER';
+        ds['gender'].fillna(value='NEUTER', inplace=True);
         scoreMatrix = self._train(ds, 'gender', json_data['gender'], scoreMatrix, 6)
         scoreMatrix = self._train(ds, 'gender', 'NEUTER', scoreMatrix, 3)
 
