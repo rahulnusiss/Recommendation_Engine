@@ -36,10 +36,10 @@ class ContentEngine(object):
         conn.set_isolation_level(0);
 
         # Fetch required table(s)
-        cursor.execute("select id, description, gender, price from public.pos_product;");
+        cursor.execute("select id, description, gender, default_price from public.pos_product;");
 
         # Importing data as pandas dataframe
-        product_df = pd.DataFrame(cursor.fetchall(), columns=['id', 'description', 'gender', 'price']);
+        product_df = pd.DataFrame(cursor.fetchall(), columns=['id', 'description', 'gender', 'default_price']);
         return product_df
 
     #Test training function
