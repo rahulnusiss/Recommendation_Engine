@@ -10,7 +10,8 @@ def get_tasks():
     #json_data = jsonify(request.json)
     print(request.json)
     # Get the products in sorted order according to their recommendation in form of json
-    json_response = content_engine.trainFeature('mentorica_article_test.csv', request.json)
+    #json_response = content_engine.trainFeature('mentorica_article_test.csv', request.json)
+    json_response = content_engine.trainFeature( request.json )
     return Response(json_response, mimetype='application/json')
 
 if __name__ == '__main__':
