@@ -1,5 +1,6 @@
 import pandas as pd
 import time
+import psycopg2
 from numpy import *
 from flask import current_app
 from sklearn.feature_extraction.text import TfidfVectorizer
@@ -12,11 +13,37 @@ def info(msg):
 
 class ContentEngine(object):
 
+    # For connecting to pg database
+    conn_string = "";
+
     def __init__(self):
-        """ For intialization TBD"""
+        self.conn_string = "host='mentorica.czdfre5hbvcb.ap-southeast-1.rds.amazonaws.com' dbname='devretailgear' " \
+                           "user='mentorica' password='M3nt0r1c4'";
+
+    def prepareDataPostgres(self):
+        # print the connection string we will use to connect
+        print("Connecting to database\n	->%s" % (self.conn_string))
+
+        # get a connection, if a connect cannot be made an exception will be raised here
+        conn = psycopg2.connect(self.conn_string)
+
+        # conn.cursor will return a cursor object, you can use this cursor to perform queries
+        cursor = conn.cursor()
+        print("Connected!\n")
+
+        # Postgres does not have autocommit
+        # Set auto commit to true
+        conn.set_isolation_level(0);
+
+        # Fetch required table(s)
+        cursor.execute("select id, description, gender, price from public.pos_product;");
+
+        # Importing data as pandas dataframe
+        product_df = pd.DataFrame(cursor.fetchall(), columns=['id', 'description', 'gender', 'price']);
+        return product_df
 
     #Test training function
-    def train(self, data_source):
+    """def train(self, data_source):
         start = time.time()
         ds = pd.read_csv(data_source)
         print("Training data ingested in %s seconds." % (time.time() - start))
@@ -40,9 +67,13 @@ class ContentEngine(object):
         print("After Sorting")
         print(scoreMatrix[0])
         print("Engine trained in %s seconds." % (time.time() - start))
+        """
 
     # Training function used in server file
-    def trainFeature(self, data_source, json_data):
+    #For csv
+    #def trainFeature(self, data_source, json_data):
+    # For postgres
+    def trainFeature(self, json_data):
         """
         :param data_source: input file
         :param json_data: input json data with features as keys.
@@ -50,7 +81,8 @@ class ContentEngine(object):
         """
         #json_data = js.load(json_feature)
         start = time.time()
-        ds = pd.read_csv(data_source)
+        #ds = pd.read_csv(data_source)
+        ds = self.prepareDataPostgres();
         print("Training data ingested in %s seconds." % (time.time() - start))
 
         n = size(ds['id'], axis=0)
@@ -62,7 +94,8 @@ class ContentEngine(object):
 
         start = time.time()
         scoreMatrix = self._train(ds, 'description', json_data['description'], scoreMatrix, 1)
-        scoreMatrix = self._train(ds, 'color', json_data['color'], scoreMatrix, 1)
+        # Color no longer exist in database table pos_product
+        #scoreMatrix = self._train(ds, 'color', json_data['color'], scoreMatrix, 1)
         scoreMatrix = self._train(ds, 'gender', json_data['gender'], scoreMatrix, 6)
         scoreMatrix = self._train(ds, 'gender', 'NEUTER', scoreMatrix, 3)
 
