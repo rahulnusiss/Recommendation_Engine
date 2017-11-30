@@ -16,15 +16,20 @@
 // Integration response.
 #set($inputRoot = $input.path('$'))
 {
-    "Customer": [
+    "Customer":
         #foreach($elem in $inputRoot.Items) {
             "id": "$elem.id.N",
-            "customerId": "$elem.Customer.M.CustomerId.N",
-            #foreach($retailer in $elem.Customer.M.Retailer.M.keySet()) {
-                $retailer: $elem.Customer.M.Retailer.M.get($retailer).L
-            }#if($foreach.hasNext),#end
+            "customerId": "$elem.Customer.M.CustomerId.S",
+            #foreach($retailer in $elem.Customer.M.Retailers.M.keySet()) 
+                "$retailer": [
+                   #foreach($product in $elem.Customer.M.Retailers.M.get($retailer).L){
+                   "Product" : "$product.M.Product.S" ,
+                   "Quantity" : "$product.M.Quantity.N"
+                   }#if($foreach.hasNext),#end
+                   #end
+                ]
+            #if($foreach.hasNext),#end
 	#end
         }#if($foreach.hasNext),#end
 	#end
-    ]
 }
