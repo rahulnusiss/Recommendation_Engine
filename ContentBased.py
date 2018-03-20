@@ -18,7 +18,7 @@ class ContentEngine(object):
 
     def __init__(self):
         self.conn_string = "host='mentorica.czdfre5hbvcb.ap-southeast-1.rds.amazonaws.com' dbname='devretailgear' " \
-                           "user='mentorica' password='M3nt0r1c4'";
+                    "user='mentorica' password='M3nt0r1c4'";
 
     def prepareDataPostgres(self):
         # print the connection string we will use to connect
@@ -36,10 +36,10 @@ class ContentEngine(object):
         conn.set_isolation_level(0);
 
         # Fetch required table(s)
-        cursor.execute("select id, description, gender, default_price from public.pos_product;");
+        cursor.execute("select car_id, age, color, gender from public.car_recommend_criteria;");
 
         # Importing data as pandas dataframe
-        product_df = pd.DataFrame(cursor.fetchall(), columns=['id', 'description', 'gender', 'default_price']);
+        product_df = pd.DataFrame(cursor.fetchall(), columns=['car_id', 'age', 'color', 'gender']);
         return product_df
 
     #Test training function
@@ -48,10 +48,10 @@ class ContentEngine(object):
         ds = pd.read_csv(data_source)
         print("Training data ingested in %s seconds." % (time.time() - start))
 
-        n = size(ds['id'], axis=0)
+        n = size(ds['car_id'], axis=0)
 
         scoreMatrix = [[0 for j in range(n)] for i in range(2)]
-        scoreMatrix[0] = ds['id']
+        scoreMatrix[0] = ds['car_id']
         # Workaround for a panda bug. Better solution TBD
         scoreMatrix[0] = scoreMatrix[0].copy()
 
@@ -85,23 +85,32 @@ class ContentEngine(object):
         ds = self.prepareDataPostgres();
         print("Training data ingested in %s seconds." % (time.time() - start))
 
-        n = size(ds['id'], axis=0)
+        n = size(ds['car_id'], axis=0)
 
         scoreMatrix = [[0 for j in range(n)] for i in range(2)]
-        scoreMatrix[0] = ds['id']
+        scoreMatrix[0] = ds['car_id']
         # Workaround for a panda bug. Better solution TBD
         scoreMatrix[0] = scoreMatrix[0].copy()
 
         start = time.time()
-        scoreMatrix = self._train(ds, 'description', json_data['description'], scoreMatrix, 1)
         # Color no longer exist in database table pos_product
         #scoreMatrix = self._train(ds, 'color', json_data['color'], scoreMatrix, 1)
         # For gender need to replace None or NAN values with NEUTER
-        ds['gender'].replace('None', 'NEUTER', inplace=True);
-        ds.loc[ds['gender'].isnull(), 'gender'] = 'NEUTER';
-        ds['gender'].fillna(value='NEUTER', inplace=True);
-        scoreMatrix = self._train(ds, 'gender', json_data['gender'], scoreMatrix, 6)
-        scoreMatrix = self._train(ds, 'gender', 'NEUTER', scoreMatrix, 3)
+        # ds['gender'].replace('None', 'NEUTER', inplace=True);
+        # ds.loc[ds['gender'].isnull(), 'gender'] = 'NEUTER';
+        # ds['gender'].fillna(value='NEUTER', inplace=True);
+        scoreMatrix = self._train(ds, 'age', '20', scoreMatrix, 3)
+        scoreMatrix = self._train(ds, 'age', '30', scoreMatrix, 4)
+        scoreMatrix = self._train(ds, 'age', '40', scoreMatrix, 5)
+        scoreMatrix = self._train(ds, 'age', '50', scoreMatrix, 6)
+        scoreMatrix = self._train(ds, 'color', 'black', scoreMatrix, 6)
+        scoreMatrix = self._train(ds, 'color', 'white', scoreMatrix, 5)
+        scoreMatrix = self._train(ds, 'color', 'brown', scoreMatrix, 4)
+        scoreMatrix = self._train(ds, 'color', 'grey', scoreMatrix, 3)
+        scoreMatrix = self._train(ds, 'color', 'green', scoreMatrix, 2)
+        scoreMatrix = self._train(ds, 'gender', 'male', scoreMatrix, 3)
+        scoreMatrix = self._train(ds, 'gender', 'female', scoreMatrix, 2)
+        # scoreMatrix = self._train(ds, 'gender', 'NEUTER', scoreMatrix, 3)
 
         # Sort the items in descending order of their score so that most matching items is at top
         scoreMatrix = self.sortScore(scoreMatrix, n)
