@@ -17,8 +17,8 @@ class ContentEngine(object):
     conn_string = "";
 
     def __init__(self):
-        self.conn_string = "host='mentorica.czdfre5hbvcb.ap-southeast-1.rds.amazonaws.com' dbname='devretailgear' " \
-                    "user='mentorica' password='M3nt0r1c4'";
+        self.conn_string = "host='localhost' dbname='devretailgear' " \
+                    "user='postgres' password='9966805'";
 
     def prepareDataPostgres(self):
         # print the connection string we will use to connect
@@ -99,17 +99,9 @@ class ContentEngine(object):
         # ds['gender'].replace('None', 'NEUTER', inplace=True);
         # ds.loc[ds['gender'].isnull(), 'gender'] = 'NEUTER';
         # ds['gender'].fillna(value='NEUTER', inplace=True);
-        scoreMatrix = self._train(ds, 'age', '20', scoreMatrix, 3)
-        scoreMatrix = self._train(ds, 'age', '30', scoreMatrix, 4)
-        scoreMatrix = self._train(ds, 'age', '40', scoreMatrix, 5)
-        scoreMatrix = self._train(ds, 'age', '50', scoreMatrix, 6)
-        scoreMatrix = self._train(ds, 'color', 'black', scoreMatrix, 6)
-        scoreMatrix = self._train(ds, 'color', 'white', scoreMatrix, 5)
-        scoreMatrix = self._train(ds, 'color', 'brown', scoreMatrix, 4)
-        scoreMatrix = self._train(ds, 'color', 'grey', scoreMatrix, 3)
-        scoreMatrix = self._train(ds, 'color', 'green', scoreMatrix, 2)
-        scoreMatrix = self._train(ds, 'gender', 'male', scoreMatrix, 3)
-        scoreMatrix = self._train(ds, 'gender', 'female', scoreMatrix, 2)
+        scoreMatrix = self._train(ds, 'age', json_data['age'], scoreMatrix, 4)
+        scoreMatrix = self._train(ds, 'color', json_data['color'], scoreMatrix, 6)
+        scoreMatrix = self._train(ds, 'gender', json_data['gender'], scoreMatrix, 3)
         # scoreMatrix = self._train(ds, 'gender', 'NEUTER', scoreMatrix, 3)
 
         # Sort the items in descending order of their score so that most matching items is at top
