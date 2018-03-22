@@ -17,8 +17,8 @@ class ContentEngine(object):
     conn_string = "";
 
     def __init__(self):
-        self.conn_string = "host='localhost' dbname='devretailgear' " \
-                    "user='postgres' password='9966805'";
+        self.conn_string = "host='mentorica.czdfre5hbvcb.ap-southeast-1.rds.amazonaws.com' dbname='devretailgear' " \
+                    "user='mentorica' password='M3nt0r1c4'";
 
     def prepareDataPostgres(self):
         # print the connection string we will use to connect
@@ -102,7 +102,6 @@ class ContentEngine(object):
         scoreMatrix = self._train(ds, 'age', json_data['age'], scoreMatrix, 4)
         scoreMatrix = self._train(ds, 'color', json_data['color'], scoreMatrix, 6)
         scoreMatrix = self._train(ds, 'gender', json_data['gender'], scoreMatrix, 3)
-        # scoreMatrix = self._train(ds, 'gender', 'NEUTER', scoreMatrix, 3)
 
         # Sort the items in descending order of their score so that most matching items is at top
         scoreMatrix = self.sortScore(scoreMatrix, n)
